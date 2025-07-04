@@ -2,6 +2,8 @@ package com.java.clinical.clinicalsapi.models;
 
 import jakarta.persistence.*;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "patients")
@@ -20,8 +22,19 @@ public class Patients {
     @Column(name = "age", nullable = false)
     private int age;
 
-    @OneToMany(mappedBy = "patient" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY )
-    private List<ClinicalData> clinicalData;
+        @OneToMany(mappedBy = "patient" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+        @JsonManagedReference
+        private List<ClinicalData> clinicalData;
+
+    // Constructors
+    public Patients() {
+    }
+
+    public Patients(String firstName, String lastName, int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
 
     // Getters and setters
 

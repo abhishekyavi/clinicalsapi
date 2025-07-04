@@ -3,7 +3,7 @@ package com.java.clinical.clinicalsapi.models;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "clinical_data")
@@ -22,10 +22,21 @@ public class ClinicalData {
     @Column(name = "measured_date_time", nullable = true)
     private LocalDateTime measuredDateTime;
 
-    @ManyToOne
+      @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private Patients patient;
+
+    // Constructors
+    public ClinicalData() {
+    }
+
+    public ClinicalData(String componentName, String componentValue, LocalDateTime measuredDateTime, Patients patient) {
+        this.componentName = componentName;
+        this.componentValue = componentValue;
+        this.measuredDateTime = measuredDateTime;
+        this.patient = patient;
+    }
 
     // Getters and setters
 
