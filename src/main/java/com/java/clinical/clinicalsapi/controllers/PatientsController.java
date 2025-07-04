@@ -2,6 +2,11 @@ package com.java.clinical.clinicalsapi.controllers;
 
 import com.java.clinical.clinicalsapi.models.Patients;
 import com.java.clinical.clinicalsapi.repos.PatientsRepository;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +20,27 @@ public class PatientsController {
 
     @Autowired
     private PatientsRepository patientsRepository;
+    
+ private final Counter patientsCreatedCounter;
+    private final Timer getAllPatientsTimer;
+
+
+
+   public PatientsController(MeterRegistry meterRegistry) {
+        this.patientsCreatedCounter = Counter.builder("patients_created_total")
+                .description("Total number of patients created")
+                .register(meterRegistry);
+        
+        this.getAllPatientsTimer = Timer.builder("get_all_patients_duration")
+                .description("Time taken to get all patients")
+                .register(meterRegistry);
+    }
+
+
+
+
+
+    
 
     @GetMapping
     public List<Patients> getAllPatients() {
